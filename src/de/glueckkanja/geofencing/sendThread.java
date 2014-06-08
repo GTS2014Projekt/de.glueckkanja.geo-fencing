@@ -16,7 +16,6 @@ import org.json.JSONArray;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 public class sendThread extends AsyncTask<Void, Void, JSONArray> {

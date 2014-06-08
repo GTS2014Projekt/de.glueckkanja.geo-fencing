@@ -5,6 +5,8 @@ import java.util.*;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.estimote.sdk.Utils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -64,7 +66,8 @@ public class BeaconList extends Activity {
 	    				//beaconList.clear();
 	    				for(int i=0 ;i < pulledBeacons.size();i++){	
 	    					//Adding pulled informations into own List
-	    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
+	    					double range = Utils.computeAccuracy(pulledBeacons.get(i));
+	    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
 	    				}	    
 	    				//call function to send
 	    				sendThread.run(beaconList);
