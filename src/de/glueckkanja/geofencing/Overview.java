@@ -6,12 +6,10 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +35,7 @@ public class Overview extends Activity{
 		//Widgets
 	 	tv_bluetoothState = (TextView) findViewById(R.id.tv_bluetoothState);
 	 	tv_macAddress = (TextView) findViewById(R.id.tv_macAddress);
-	 	b_beacons = (Button) findViewById(R.id.b_beacons);
+	 	b_beacons=(Button) findViewById(R.id.b_beacons);
 	 	
 	 	b_bluetooth=(Button) findViewById(R.id.b_bluetooth);
 	 	

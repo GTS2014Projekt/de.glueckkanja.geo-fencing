@@ -1,12 +1,7 @@
 package de.glueckkanja.geofencing;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,16 +20,16 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class sendThread extends AsyncTask<Void, Void, JSONArray> {
-	private boolean send;
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>(); 
 	private String URL;
 	private String Mac;
 	private Context classBeaconList;
 	private String data;
 	
-	public sendThread(String URL, String Mac){
+	public sendThread(Context context, String URL, String Mac){
 		this.URL = URL;
 		this.Mac = Mac;
+		this.classBeaconList =context;
 	}
 	public sendThread(String URL, String Mac, String data){
 		this.URL = URL;
@@ -50,9 +45,10 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 		data = "";
 		for(int i = 0; i<beaconList.size(); i++){
 			if(i== 0){
-				data += beaconList.get(i).getName()+"#"+beaconList.get(i).getChildList()[0];
+				//no "#" in first position
+				data += beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getChildList()[0];
 			}else{
-				data += "#"+beaconList.get(i).getName()+"#"+beaconList.get(i).getChildList()[0];
+				data += "#"+beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getChildList()[0];
 			}						
 		}
 	}
@@ -95,6 +91,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	            // do something
 	        } else {
 	            // error occured
+	        	Toast.makeText(classBeaconList, "An Error occured", Toast.LENGTH_LONG).show();
 	        }
 	    }
 }
