@@ -22,7 +22,7 @@ public class BeaconList extends Activity {
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>();
 	private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
 	private static final String TAG = BeaconList.class.getSimpleName();
-	private static final String serverURL = "HTTP://172.27.1.100:3000/users/updatedata";
+	private static String serverURL;
 	private BeaconManager myBeaconManager;
 	private myExpandableListViewAdapter myAdapter;
 	private Intent myIntent;
@@ -37,6 +37,7 @@ public class BeaconList extends Activity {
 		//get Extra information from Intent
 		myIntent = getIntent();
 		MAC_Address = myIntent.getStringExtra("MAC");
+		serverURL = myIntent.getStringExtra("URL");
 		//Widgets
 		elv_beaconList = (ExpandableListView) findViewById(R.id.elv_beaconList);
 		myAdapter = new myExpandableListViewAdapter(getApplicationContext());
@@ -60,17 +61,18 @@ public class BeaconList extends Activity {
 	    			@Override
 	    			//
 	    			public void run() {
+	    				beaconList.clear();
 	    				if (pulledBeacons.isEmpty()){
 	    					Toast.makeText(getApplicationContext(), "Keine Beacons gefunden!", Toast.LENGTH_SHORT).show();
+	    				}else{
+	    					for(int i=0 ;i < pulledBeacons.size();i++){	
+		    					//Adding pulled informations into own List
+		    					double range = Utils.computeAccuracy(pulledBeacons.get(i));
+		    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
+	    					}
+	    				//call function to send	  
+	    				sendThread.run(beaconList);  
 	    				}
-	    				//beaconList.clear();
-	    				for(int i=0 ;i < pulledBeacons.size();i++){	
-	    					//Adding pulled informations into own List
-	    					double range = Utils.computeAccuracy(pulledBeacons.get(i));
-	    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
-	    				}	    
-	    				//call function to send
-	    				sendThread.run(beaconList);
 	    				myAdapter.refreshList(beaconList);
 	    			}
 	    		});

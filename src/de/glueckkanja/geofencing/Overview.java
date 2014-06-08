@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class Overview extends Activity{
 	private static final int REQUEST_ENABLE_BT = 1;
 	private TextView tv_bluetoothState;
 	private TextView tv_macAddress;
+	private EditText e_URL;
 	private Button b_beacons;
 	private Button b_bluetooth;
 	private BluetoothAdapter myBluetoothAdapter;
@@ -35,8 +37,8 @@ public class Overview extends Activity{
 		//Widgets
 	 	tv_bluetoothState = (TextView) findViewById(R.id.tv_bluetoothState);
 	 	tv_macAddress = (TextView) findViewById(R.id.tv_macAddress);
-	 	b_beacons=(Button) findViewById(R.id.b_beacons);
-	 	
+	 	e_URL = (EditText) findViewById(R.id.e_URL);
+	 	b_beacons=(Button) findViewById(R.id.b_beacons);	 	
 	 	b_bluetooth=(Button) findViewById(R.id.b_bluetooth);
 	 	
 	 	//end Widgets  
@@ -133,6 +135,7 @@ public class Overview extends Activity{
 		// TODO Auto-generated method stub
 		Intent i_beacon = new Intent(this, BeaconList.class);
 		i_beacon.putExtra("MAC", MAC_Address);
+		//i_beacon.putExtra("URL", e_URL.getText().toString());
 		startActivity(i_beacon);	
 	}
 	public void oc_bluetooth(View v) {
