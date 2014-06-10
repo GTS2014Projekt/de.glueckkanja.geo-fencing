@@ -45,7 +45,8 @@ public class BeaconList extends Activity {
 		myAdapter = new myExpandableListViewAdapter(getApplicationContext());
 		elv_beaconList.setAdapter(myAdapter);	
 		//set up sendThread
-		sendThread = new sendThread(this, serverURL, MAC_Address);		
+		sendThread = new sendThread(this, serverURL, MAC_Address, "");	
+		sendThread.startSceduler();
 		//Initialize BeaconManager
 		beaconManager();
 	}
@@ -71,9 +72,7 @@ public class BeaconList extends Activity {
 		    					//Adding pulled informations into own List
 		    					double range = Utils.computeAccuracy(pulledBeacons.get(i));
 		    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), f.format(range), pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
-	    					}
-	    				//call function to send	  
-	    				sendThread.run(beaconList);  
+	    					}  
 	    				}
 	    				myAdapter.refreshList(beaconList);
 	    			}
@@ -95,7 +94,7 @@ public class BeaconList extends Activity {
 	        }
 	      }
 	    });
-	  }
+	}
 	
 	
 /*	
@@ -156,6 +155,7 @@ public class BeaconList extends Activity {
 		    } catch (RemoteException e) {
 		     
 		    }
+		sendThread.stopSceduler();
 	}
 	
 	protected void onDestroy(){

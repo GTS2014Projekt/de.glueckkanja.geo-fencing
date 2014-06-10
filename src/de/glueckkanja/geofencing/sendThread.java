@@ -16,32 +16,65 @@ import org.json.JSONArray;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.widget.Toast;
 
 public class sendThread extends AsyncTask<Void, Void, JSONArray> {
+	//Attributes
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>(); 
-	private final String URL="HTTP://172.27.1.157:3000/users/updatedata";
+	private BeaconList myclassBeaconList;
+	private String URL;
 	private String Mac;
-	
-	private Context classBeaconList;
 	private String data;
+	//Needed for SendTimer
+	private int duration=15000;
+	private boolean Running = true;
+	private Thread sceduler;
 	
-	public sendThread(Context context, String URL, String Mac){
-		//this.URL = URL;
+	public sendThread(BeaconList classbeaconList, String URL, String Mac, String data){
+		this.myclassBeaconList = classbeaconList;
+		this.URL = URL;
 		this.Mac = Mac;
-		this.classBeaconList =context;
+		this.data = data;
+		//set up Sceduler
+		sceduler = new Thread(new Runnable(){
+			@Override
+			public void run(){
+				while(Running){
+					try {
+						Thread.sleep(duration);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					sending(myclassBeaconList.getBeaconList());
+				}
+				
+			}
+		});
 	}
+	
 	public sendThread(String URL, String Mac, String data){
-		//this.URL = URL;
+		this.URL = URL;
 		this.Mac = Mac;
 		this.data = data;
 	}
-	public void run(ArrayList<BeaconItem> beaconList){
-		this.beaconList = beaconList;
-		createData();
-		new sendThread(URL, Mac, data).execute();
+	
+	public void startSceduler(){
+		sceduler.start();
 	}
-	public void createData(){
+	public void stopSceduler(){
+		sceduler.interrupt();
+	}
+	
+	public void sending(ArrayList<BeaconItem> beaconList){
+		data = createData(beaconList);
+		if(data != null && !data.isEmpty()){
+		new sendThread(URL, Mac, data).execute();
+		}
+	}
+	
+	public String createData(ArrayList<BeaconItem> beaconList){
 		data = "";
 		for(int i = 0; i<beaconList.size(); i++){
 			if(i== 0){
@@ -51,6 +84,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 				data += "#"+beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getRange();
 			}						
 		}
+		return data;
 	}
 	
 	protected JSONArray doInBackground(Void... params) {
@@ -88,7 +122,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	    @Override
 	    protected void onPostExecute(JSONArray result) {
 	        if (result != null) {
-	            // do something
+	            // sending worked fine
 	        } else {
 	            // error occured
 	        	//Toast.makeText(classBeaconList, "An Error occured", Toast.LENGTH_LONG).show();
