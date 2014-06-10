@@ -1,5 +1,6 @@
 package de.glueckkanja.geofencing;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 import com.estimote.sdk.Beacon;
@@ -28,6 +29,7 @@ public class BeaconList extends Activity {
 	private Intent myIntent;
 	private String MAC_Address;
 	private sendThread sendThread;
+	DecimalFormat f = new DecimalFormat("#0.00"); 
 	
 	
 	@Override
@@ -68,7 +70,7 @@ public class BeaconList extends Activity {
 	    					for(int i=0 ;i < pulledBeacons.size();i++){	
 		    					//Adding pulled informations into own List
 		    					double range = Utils.computeAccuracy(pulledBeacons.get(i));
-		    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
+		    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), f.format(range), pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
 	    					}
 	    				//call function to send	  
 	    				sendThread.run(beaconList);  

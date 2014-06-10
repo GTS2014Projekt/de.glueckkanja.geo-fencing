@@ -20,18 +20,19 @@ import android.widget.Toast;
 
 public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>(); 
-	private String URL;
+	private final String URL="HTTP://172.27.1.157:3000/users/updatedata";
 	private String Mac;
+	
 	private Context classBeaconList;
 	private String data;
 	
 	public sendThread(Context context, String URL, String Mac){
-		this.URL = URL;
+		//this.URL = URL;
 		this.Mac = Mac;
 		this.classBeaconList =context;
 	}
 	public sendThread(String URL, String Mac, String data){
-		this.URL = URL;
+		//this.URL = URL;
 		this.Mac = Mac;
 		this.data = data;
 	}
@@ -45,9 +46,9 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 		for(int i = 0; i<beaconList.size(); i++){
 			if(i== 0){
 				//no "#" in first position
-				data += beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getChildList()[0];
+				data += beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getRange();
 			}else{
-				data += "#"+beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getChildList()[0];
+				data += "#"+beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getRange();
 			}						
 		}
 	}
@@ -90,7 +91,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	            // do something
 	        } else {
 	            // error occured
-	        	Toast.makeText(classBeaconList, "An Error occured", Toast.LENGTH_LONG).show();
+	        	//Toast.makeText(classBeaconList, "An Error occured", Toast.LENGTH_LONG).show();
 	        }
 	    }
 }

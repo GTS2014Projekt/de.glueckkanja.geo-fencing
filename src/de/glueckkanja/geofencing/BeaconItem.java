@@ -5,14 +5,14 @@ public class BeaconItem {
 	private String[]childList;
 	private String name;
 	private String mac_Address;
-	private double range; 
+	private String range; 
 	private int minor;
 	private int major;
 	private int mPower;
 	private int rssi;	
 	//end Attributes
 	
-	public BeaconItem(String name, String mac_Address, double range, int minor, int major, int mPower, int rssi){
+	public BeaconItem(String name, String mac_Address, String range, int minor, int major, int mPower, int rssi){
 		this.name=name;
 		this.mac_Address = mac_Address;
 		this.range = range;
@@ -20,10 +20,10 @@ public class BeaconItem {
 		this.major = major;
 		this.mPower = mPower;
 		this.rssi = rssi;
-		this.childList = createChildList(name, mac_Address, minor, major, mPower, rssi);
+		this.childList = createChildList(name, mac_Address, range, minor, major, mPower, rssi);
 	}
 	
-	public String[] createChildList(String name, String mac_Address, int minor, int major, int mPower, int rssi){
+	public String[] createChildList(String name, String mac_Address, String range, int minor, int major, int mPower, int rssi){
 		String[] childList = {"Hersteller: "+name, "MAC-Adresse: "+ mac_Address,"Distanz: "+range, "Minor: "+minor, "Major: "+ major, "Measured Power: "+ mPower, "Rssi: "+rssi};		
 		return childList;
 	}
@@ -54,6 +54,10 @@ public class BeaconItem {
 	
 	public int getRssi(){
 		return this.rssi ;
+	}
+	
+	public String getRange(){
+		return this.range;
 	}
 	
 }
