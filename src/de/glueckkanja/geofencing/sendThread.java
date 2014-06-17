@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 public class sendThread extends AsyncTask<Void, Void, JSONArray> {
@@ -46,8 +47,10 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					sending(myclassBeaconList.getBeaconList());
+					}finally{
+						Log.e("Sending", "sendet...");
+						sending(myclassBeaconList.getBeaconList());
+					}					
 				}
 				
 			}
@@ -70,7 +73,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	public void sending(ArrayList<BeaconItem> beaconList){
 		data = createData(beaconList);
 		if(data != null && !data.isEmpty()){
-		new sendThread(URL, Mac, data).execute();
+			new sendThread(URL, Mac, data).execute();
 		}
 	}
 	
@@ -127,5 +130,5 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	            // error occured
 	        	//Toast.makeText(classBeaconList, "An Error occured", Toast.LENGTH_LONG).show();
 	        }
-	    }
+	    }	    
 }

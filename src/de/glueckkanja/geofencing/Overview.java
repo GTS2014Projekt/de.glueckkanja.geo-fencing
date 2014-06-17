@@ -135,7 +135,7 @@ public class Overview extends Activity{
 		// TODO Auto-generated method stub
 		Intent i_beacon = new Intent(this, BeaconList.class);
 		i_beacon.putExtra("MAC", MAC_Address);
-		//i_beacon.putExtra("URL", e_URL.getText().toString());
+		i_beacon.putExtra("URL", e_URL.getText().toString());
 		startActivity(i_beacon);	
 	}
 	public void oc_bluetooth(View v) {
