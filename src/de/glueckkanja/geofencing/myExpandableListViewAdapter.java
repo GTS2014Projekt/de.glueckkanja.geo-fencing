@@ -1,3 +1,12 @@
+/*
+ * Author : Jan-Niklas Vierheller
+ * Date: 25.06.2014
+ * 
+ * Summary: This is a Listview Adapter that handles and lists all Estiomote Beacons
+ * 
+ * Uses Estimote Technology and their Code!
+ */
+
 package de.glueckkanja.geofencing;
 
 import java.util.ArrayList;

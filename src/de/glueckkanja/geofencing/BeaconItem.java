@@ -1,3 +1,13 @@
+/*
+ * 
+ * Author : Jan-Niklas Vierheller
+ * Date: 25.06.2014
+ * 
+ * Summary: This Code helps to store Informations from Estimote Beacons in a List
+ * 
+ * Uses Estimote Technology and their Code!
+ */
+
 package de.glueckkanja.geofencing;
 
 public class BeaconItem {

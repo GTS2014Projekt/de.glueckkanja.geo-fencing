@@ -1,3 +1,12 @@
+/*
+ * Author : Jan-Niklas Vierheller
+ * Date: 25.06.2014
+ * 
+ * Summary: This is creating a Activity which displays all Estimote Beacons in range
+ * 
+ * Uses Estimote Technology and their Code!
+ */
+
 package de.glueckkanja.geofencing;
 
 import java.text.DecimalFormat;
@@ -18,11 +27,11 @@ import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-public class BeaconList extends Activity {
+public class BeaconListingActivity extends Activity {
 	private ExpandableListView elv_beaconList;
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>();
 	private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
-	private static final String TAG = BeaconList.class.getSimpleName();
+	private static final String TAG = BeaconListingActivity.class.getSimpleName();
 	private static String serverURL;
 	private BeaconManager myBeaconManager;
 	private myExpandableListViewAdapter myAdapter;
@@ -43,15 +52,12 @@ public class BeaconList extends Activity {
 		//Widgets
 		elv_beaconList = (ExpandableListView) findViewById(R.id.elv_beaconList);
 		myAdapter = new myExpandableListViewAdapter(getApplicationContext());
-		elv_beaconList.setAdapter(myAdapter);	
-		//set up sendThread
-		sendThread = new sendThread(this, serverURL, MAC_Address, "");	
-		sendThread.startSceduler();
+		elv_beaconList.setAdapter(myAdapter);			
 		//Initialize BeaconManager
 		beaconManager();
 	}
 	
-	public BeaconList(){
+	public BeaconListingActivity(){
 		
 	}
 	public void beaconManager(){
@@ -155,7 +161,6 @@ public class BeaconList extends Activity {
 		    } catch (RemoteException e) {
 		     
 		    }
-		sendThread.stopSceduler();
 	}
 	
 	protected void onDestroy(){

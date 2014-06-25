@@ -1,3 +1,12 @@
+/*
+ * Author : Jan-Niklas Vierheller
+ * Date: 25.06.2014
+ * 
+ * Summary: OLD! former way to send data!
+ * 
+ * Uses Estimote Technology and their Code!
+ */
+
 package de.glueckkanja.geofencing;
 
 import java.io.BufferedReader;
@@ -23,7 +32,7 @@ import android.widget.Toast;
 public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	//Attributes
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>(); 
-	private BeaconList myclassBeaconList;
+	private BeaconListingActivity myclassBeaconList;
 	private String URL;
 	private String Mac;
 	private String data;
@@ -32,7 +41,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	private boolean Running = true;
 	private Thread sceduler;
 	
-	public sendThread(BeaconList classbeaconList, String URL, String Mac, String data){
+	public sendThread(BeaconListingActivity classbeaconList, String URL, String Mac, String data){
 		this.myclassBeaconList = classbeaconList;
 		this.URL = URL;
 		this.Mac = Mac;

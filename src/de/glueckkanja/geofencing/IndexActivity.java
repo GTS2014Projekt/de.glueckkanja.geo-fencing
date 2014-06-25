@@ -1,6 +1,15 @@
+/*
+ * Author : Jan-Niklas Vierheller
+ * Date: 25.06.2014
+ * 
+ * Summary: This is creating a Activity which displays Settings and gives access to other Activitys and Services
+ * 
+ * Uses Estimote Technology and their Code!
+ */
 package de.glueckkanja.geofencing;
 
 import com.estimote.sdk.BeaconManager;
+
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -16,16 +25,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class Overview extends Activity{
+public class IndexActivity extends Activity{
 	private static final int REQUEST_ENABLE_BT = 1;
 	private TextView tv_bluetoothState;
 	private TextView tv_macAddress;
 	private EditText e_URL;
 	private Button b_beacons;
 	private Button b_bluetooth;
+	private Button b_ServiceON;
+	private Button b_ServiceOFF;
 	private BluetoothAdapter myBluetoothAdapter;
 	private BeaconManager myOverviewBeaconManager;
 	private String MAC_Address;
+	private Intent intentService;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +52,8 @@ public class Overview extends Activity{
 	 	e_URL = (EditText) findViewById(R.id.e_URL);
 	 	b_beacons=(Button) findViewById(R.id.b_beacons);	 	
 	 	b_bluetooth=(Button) findViewById(R.id.b_bluetooth);
-	 	
+	 	b_ServiceON=(Button) findViewById(R.id.b_ServiceON);
+	 	b_ServiceOFF=(Button) findViewById(R.id.bServiceOFF);
 	 	//end Widgets  
 	 	MAC_Address = myBluetoothAdapter.getAddress();
 	 	tv_macAddress.setText(myBluetoothAdapter.getAddress());
@@ -127,13 +140,16 @@ public class Overview extends Activity{
 		if (id == R.id.action_settings) {
 			return true; 
 		}
+		if(id == R.id.action_mode){
+			
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	
 	public void oc_Beacons(View v) {
 		// TODO Auto-generated method stub
-		Intent i_beacon = new Intent(this, BeaconList.class);
+		Intent i_beacon = new Intent(this, BeaconListingActivity.class);
 		i_beacon.putExtra("MAC", MAC_Address);
 		i_beacon.putExtra("URL", e_URL.getText().toString());
 		startActivity(i_beacon);	
@@ -141,5 +157,26 @@ public class Overview extends Activity{
 	public void oc_bluetooth(View v) {
 		// TODO Auto-generated method stub
 		bluetoothState();	
+	}
+	public void oc_serviceON(View v) {
+		// TODO Auto-generated method stub
+		if(intentService == null){
+		intentService = new Intent(getBaseContext(), sendingService.class);
+		intentService.putExtra("MAC", MAC_Address);
+		intentService.putExtra("url", e_URL.getText().toString());
+		startService(intentService);
+		}else{
+			Toast.makeText(getBaseContext(), "Service already running", Toast.LENGTH_SHORT).show();
+		}
+	}
+	public void oc_serviceOFF(View v) {
+		// TODO Auto-generated method stub
+		if(intentService != null){
+			if(stopService(intentService)){
+				intentService = null;
+			}
+		}else{
+			Toast.makeText(getBaseContext(), "No Service created!", Toast.LENGTH_SHORT).show();
+		}
 	}
 }

@@ -16,17 +16,6 @@
         android:layout_alignParentTop="true"
         android:text="TextView" />
 
-    <EditText
-        android:id="@+id/e_URL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_bluetoothState"
-        android:layout_marginTop="68dp"
-        android:ems="10"
-        android:text="HTTP://172.27.1.100:3000/users/updatedata" />
-
     <TextView
         android:id="@+id/tv_macAddress"
         android:layout_width="wrap_content"
@@ -34,17 +23,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="TextView" />
-
-    <Button
-        android:id="@+id/b_bluetooth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="49dp"
-        android:onClick="oc_bluetooth"
-        android:text="Start Bluetooth"
-        android:visibility="invisible" />
 
     <Button
         android:id="@+id/b_beacons"
@@ -55,5 +33,55 @@
         android:layout_marginBottom="17dp"
         android:onClick="oc_Beacons"
         android:text="Beacons" />
+
+    <EditText
+        android:id="@+id/e_URL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_bluetoothState"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:maxHeight="100dp"
+        android:minHeight="50dp"
+        android:minWidth="300dp"
+        android:text="HTTP://172.27.1.100:3000/users/updatedata" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/b_ServiceON"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/e_URL"
+        android:layout_below="@+id/e_URL"
+        android:layout_marginTop="24dp"
+        android:minWidth="130dp"
+        android:onClick="oc_serviceON"
+        android:text="Service ON"
+        android:width="130dp" />
+
+    <Button
+        android:id="@+id/bServiceOFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/b_ServiceON"
+        android:layout_alignBottom="@+id/b_ServiceON"
+        android:layout_alignRight="@+id/e_URL"
+        android:minWidth="130dp"
+        android:onClick="oc_serviceOFF"
+        android:text="Service OFF"
+        android:width="130dp" />
+
+    <Button
+        android:id="@+id/b_bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:onClick="oc_bluetooth"
+        android:text="Start Bluetooth"
+        android:visibility="invisible" />
 
 </RelativeLayout>
