@@ -37,12 +37,12 @@ public final class R {
         public static final int tv_macAddress=0x7f080002;
     }
     public static final class layout {
-        public static final int activity_beacon_list=0x7f030000;
-        public static final int activity_overview=0x7f030001;
+        public static final int activity_beaconlisting=0x7f030000;
+        public static final int activity_index=0x7f030001;
     }
     public static final class menu {
-        public static final int beacon_list=0x7f070000;
-        public static final int overview=0x7f070001;
+        public static final int menu_beaconlisting=0x7f070000;
+        public static final int menu_index=0x7f070001;
     }
     public static final class string {
         public static final int action_mode=0x7f050004;

@@ -44,7 +44,7 @@ public class BeaconListingActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_beacon_list);
+		setContentView(R.layout.activity_beaconlisting);
 		//get Extra information from Intent
 		myIntent = getIntent();
 		MAC_Address = myIntent.getStringExtra("MAC");
@@ -102,42 +102,6 @@ public class BeaconListingActivity extends Activity {
 	    });
 	}
 	
-	
-/*	
-	//sorting the Beaconlist
-	public void sortBeaconList(ArrayList<BeaconItem> sortList){
-		qSort(sortList, 0, sortList.size()-1);
-		
-	}
-	
-	public void qSort(ArrayList<BeaconItem> sortList, int links, int rechts) {
-	      if (links < rechts) {
-	         int i = partition(sortList,links,rechts);
-	         qSort(sortList,links,i-1);
-	         qSort(sortList,i+1,rechts);
-	      }
-	}
-	
-	 public int partition(ArrayList<BeaconItem> sortList, int links, int rechts) {
-	      int  i, j;
-	      String pivot;
-	      pivot = sortList.get(rechts).getName();               
-	      i     = links;
-	      j     = rechts-1;
-	      while(i<=j) {
-	         if (sortList.get(i).getName().compareTo(pivot) > 0) {     
-	            // tausche x[i] und x[j]
-	            Collections.swap(sortList, i, j);                             
-	            j--;
-	         } else i++;            
-	      }
-	      // tausche x[i] und x[rechts]
-	      Collections.swap(sortList, i, j);
-	        
-	      return i;
-	   }
-*/	
-	
 	public ArrayList<BeaconItem> getBeaconList(){
 		return (beaconList);
 	}
@@ -176,7 +140,7 @@ public class BeaconListingActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.beacon_list, menu);
+		getMenuInflater().inflate(R.menu.menu_beaconlisting, menu);
 		return true;
 	}
 

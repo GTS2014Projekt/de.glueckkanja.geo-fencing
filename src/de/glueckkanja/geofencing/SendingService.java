@@ -30,7 +30,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class sendingService extends Service {
+public class SendingService extends Service {
 	//debug
 		private int counter=0;
 	//To manipulate update time
@@ -110,7 +110,7 @@ public class sendingService extends Service {
 				
 				// Add your data
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-				nameValuePairs.add(new BasicNameValuePair("macadresse", mac));
+				nameValuePairs.add(new BasicNameValuePair("macAdresse", mac));
 				nameValuePairs.add(new BasicNameValuePair("beacons", data));
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				

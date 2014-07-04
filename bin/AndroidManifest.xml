@@ -37,7 +37,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.glueckkanja.geofencing.Overview" />
         </activity>
-        <service android:name=".sendingService" />
+        <service android:name=".SendingService" />
     </application>
 
 </manifest>
