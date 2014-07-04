@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 public class sendThread extends AsyncTask<Void, Void, JSONArray> {
@@ -26,6 +27,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	private String URL;
 	private String Mac;
 	private String data;
+	
 	//Needed for SendTimer
 	private int duration=15000;
 	private boolean Running = true;
@@ -70,7 +72,8 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	public void sending(ArrayList<BeaconItem> beaconList){
 		data = createData(beaconList);
 		if(data != null && !data.isEmpty()){
-		new sendThread(URL, Mac, data).execute();
+			Log.d("Sending", "Sending Method");
+			new sendThread(URL, Mac, data).execute();
 		}
 	}
 	
@@ -87,6 +90,10 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 		return data;
 	}
 	
+	public void setRunning(boolean b){
+		this.Running = b;
+	}
+	
 	protected JSONArray doInBackground(Void... params) {
 	        try {
 	            HttpClient httpclient = new DefaultHttpClient();
@@ -94,13 +101,14 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 
 	            // Add your data
 	            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-	            nameValuePairs.add(new BasicNameValuePair("macadresse", Mac));
+	            nameValuePairs.add(new BasicNameValuePair("macAdress", Mac));
 	            nameValuePairs.add(new BasicNameValuePair("beacons", data));
 	            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 	            // Execute HTTP Post Request
+	            Log.d("Sending", "Before execute");
 	            HttpResponse response = httpclient.execute(httppost);
-
+	            Log.d("Sending", "After execute");
 	            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
 	            StringBuilder sb = new StringBuilder();
 	            sb.append(reader.readLine() + "\n");

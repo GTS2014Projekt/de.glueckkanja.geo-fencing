@@ -31,51 +31,62 @@ public class Overview extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_overview);
-		//BluetoothAdapter
-	 	myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-	 	myOverviewBeaconManager = new BeaconManager(this);
+		
 		//Widgets
 	 	tv_bluetoothState = (TextView) findViewById(R.id.tv_bluetoothState);
 	 	tv_macAddress = (TextView) findViewById(R.id.tv_macAddress);
 	 	e_URL = (EditText) findViewById(R.id.e_URL);
 	 	b_beacons=(Button) findViewById(R.id.b_beacons);	 	
 	 	b_bluetooth=(Button) findViewById(R.id.b_bluetooth);
-	 	
-	 	//end Widgets  
+		
+		//BluetoothAdapter
+	 	myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+	 	myOverviewBeaconManager = new BeaconManager(this);
 	 	MAC_Address = myBluetoothAdapter.getAddress();
 	 	tv_macAddress.setText(myBluetoothAdapter.getAddress());
 		 
 	 	//check Bluetooth state	
-	 	bluetoothState();
-	
+	 	bluetoothState();	
 	}
 	
 	public void bluetoothState(){
+		//Called if Device does not support Bluetooth
 		if (myBluetoothAdapter == null) {
 			tv_bluetoothState.setTextColor(Color.RED);
 			tv_bluetoothState.setText("Gerät unterstützt kein Bluetooth!");
 		}
+		//Called if Bluetooth is enabled
 		if (myBluetoothAdapter.isEnabled()) {
 			tv_bluetoothState.setTextColor(Color.GREEN);
 			tv_bluetoothState.setText("Bluetooth aktiviert!");
 			
-		}else{
+		}else{ // Called if not
 			tv_bluetoothState.setTextColor(Color.RED);
 			tv_bluetoothState.setText("Bluetooth ist aus!");
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-		   
-		    
 		}
+		//Called if Device does not support Bluetooth low energy
 		if (!myOverviewBeaconManager.hasBluetooth()) {
 			tv_bluetoothState.setTextColor(Color.RED);
-			tv_bluetoothState.setText("gerät unterstützt kein Bluetooth-Low-Energy");
+			tv_bluetoothState.setText("Gerät unterstützt kein Bluetooth-Low-Energy");
 		}
 	}
 	
 	
-	
-	
+	//Called after Bluetooth turned on
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //accepted Request
+        if(resultCode == RESULT_OK){
+        	tv_bluetoothState.setTextColor(Color.GREEN);
+        	tv_bluetoothState.setText("Bluetooth aktiviert!");
+        }//didn't accept Request
+        if(resultCode == RESULT_CANCELED){
+        	tv_bluetoothState.setTextColor(Color.RED);
+        	tv_bluetoothState.setText("Bluetooth ist aus!");
+        }
+    }
 	
 	protected void onStart(){
 		super.onStart();
@@ -86,13 +97,7 @@ public class Overview extends Activity{
 		
 	}
 	protected void onResume(){
-		super.onResume();
-		if(!myBluetoothAdapter.isEnabled()){
-			Toast.makeText(getApplicationContext(), "Bluetooth ist Aus!", Toast.LENGTH_SHORT).show();
-			//make Button Visible
-			b_bluetooth.setVisibility(0);
-		}
-		
+		super.onResume();		
 	}
 
 	protected void onPause(){
@@ -105,11 +110,7 @@ public class Overview extends Activity{
 	
 	protected void onDestroy(){
 		super.onDestroy();
-	}
-	
-	
-	
-	
+	}	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -133,10 +134,14 @@ public class Overview extends Activity{
 	
 	public void oc_Beacons(View v) {
 		// TODO Auto-generated method stub
-		Intent i_beacon = new Intent(this, BeaconList.class);
-		i_beacon.putExtra("MAC", MAC_Address);
-		//i_beacon.putExtra("URL", e_URL.getText().toString());
-		startActivity(i_beacon);	
+		if(myBluetoothAdapter.isEnabled()){
+			Intent i_beacon = new Intent(this, BeaconList.class);
+			i_beacon.putExtra("MAC", MAC_Address);
+			i_beacon.putExtra("URL", "HTTP://"+e_URL.getText().toString()+":3000/functions/update");
+			startActivity(i_beacon);
+		}else{
+			bluetoothState();
+		}
 	}
 	public void oc_bluetooth(View v) {
 		// TODO Auto-generated method stub

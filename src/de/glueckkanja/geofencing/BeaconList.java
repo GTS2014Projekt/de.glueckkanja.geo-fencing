@@ -36,17 +36,21 @@ public class BeaconList extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_beacon_list);
+		
 		//get Extra information from Intent
 		myIntent = getIntent();
 		MAC_Address = myIntent.getStringExtra("MAC");
 		serverURL = myIntent.getStringExtra("URL");
+		
 		//Widgets
 		elv_beaconList = (ExpandableListView) findViewById(R.id.elv_beaconList);
 		myAdapter = new myExpandableListViewAdapter(getApplicationContext());
 		elv_beaconList.setAdapter(myAdapter);	
+		
 		//set up sendThread
 		sendThread = new sendThread(this, serverURL, MAC_Address, "");	
 		sendThread.startSceduler();
+		
 		//Initialize BeaconManager
 		beaconManager();
 	}
@@ -96,42 +100,6 @@ public class BeaconList extends Activity {
 	    });
 	}
 	
-	
-/*	
-	//sorting the Beaconlist
-	public void sortBeaconList(ArrayList<BeaconItem> sortList){
-		qSort(sortList, 0, sortList.size()-1);
-		
-	}
-	
-	public void qSort(ArrayList<BeaconItem> sortList, int links, int rechts) {
-	      if (links < rechts) {
-	         int i = partition(sortList,links,rechts);
-	         qSort(sortList,links,i-1);
-	         qSort(sortList,i+1,rechts);
-	      }
-	}
-	
-	 public int partition(ArrayList<BeaconItem> sortList, int links, int rechts) {
-	      int  i, j;
-	      String pivot;
-	      pivot = sortList.get(rechts).getName();               
-	      i     = links;
-	      j     = rechts-1;
-	      while(i<=j) {
-	         if (sortList.get(i).getName().compareTo(pivot) > 0) {     
-	            // tausche x[i] und x[j]
-	            Collections.swap(sortList, i, j);                             
-	            j--;
-	         } else i++;            
-	      }
-	      // tausche x[i] und x[rechts]
-	      Collections.swap(sortList, i, j);
-	        
-	      return i;
-	   }
-*/	
-	
 	public ArrayList<BeaconItem> getBeaconList(){
 		return (beaconList);
 	}
@@ -142,19 +110,17 @@ public class BeaconList extends Activity {
 
 	protected void onStart(){
 		super.onStart();
-		
-		
 		connectToService();
-		
 	}
 	
 	protected void onStop(){
 		super.onStop();
 		try {
 		      myBeaconManager.stopRanging(ALL_ESTIMOTE_BEACONS_REGION);
-		    } catch (RemoteException e) {
-		     
-		    }
+		} catch (RemoteException e) {
+		e.printStackTrace();    	
+		}
+		sendThread.setRunning(false);
 		sendThread.stopSceduler();
 	}
 	
@@ -163,10 +129,6 @@ public class BeaconList extends Activity {
 		myBeaconManager.disconnect();
 	}
 	
-	
-	
-	
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -174,10 +136,8 @@ public class BeaconList extends Activity {
 		getMenuInflater().inflate(R.menu.beacon_list, menu);
 		return true;
 	}
-
-	@Override
 	
-	
+	@Override	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -188,9 +148,6 @@ public class BeaconList extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	
-
 }
 
 

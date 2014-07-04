@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="TextView" />
+        android:hint="Bluetooth Status" />
 
     <EditText
         android:id="@+id/e_URL"
@@ -25,7 +25,7 @@
         android:layout_below="@+id/tv_bluetoothState"
         android:layout_marginTop="68dp"
         android:ems="10"
-        android:text="HTTP://172.27.1.100:3000/users/updatedata" />
+        android:hint="IP-Adresse einfügen" />
 
     <TextView
         android:id="@+id/tv_macAddress"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="TextView" />
+        android:hint="MAC-Adresse" />
 
     <Button
         android:id="@+id/b_bluetooth"
@@ -43,8 +43,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="49dp"
         android:onClick="oc_bluetooth"
-        android:text="Start Bluetooth"
-        android:visibility="invisible" />
+        android:text="Start Bluetooth"/>
 
     <Button
         android:id="@+id/b_beacons"
