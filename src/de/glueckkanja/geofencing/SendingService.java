@@ -54,10 +54,11 @@ public class SendingService extends Service {
 			@Override
 			public void run(){
 				Log.d("Handler", "Durchlauf" + counter++);
+				Toast.makeText(getBaseContext(), String.valueOf(counter), Toast.LENGTH_SHORT).show();
 				if(beaconList != null){
 					String data = createData(beaconList);
 					if(data != null && !data.isEmpty()){				
-							new DoBackgroundTask().execute(url, mac, data);
+							new BackgroundTask().execute(url, mac, data);
 					}else{
 						Toast.makeText(getBaseContext(), "no Data", Toast.LENGTH_SHORT).show();
 					}
@@ -91,7 +92,7 @@ public class SendingService extends Service {
 	}
 	
 	//Is the Asyncronous Task that runs in Background
-	private class DoBackgroundTask extends AsyncTask<String, Void, JSONArray>{
+	private class BackgroundTask extends AsyncTask<String, Void, JSONArray>{
 
 		@Override
 		protected JSONArray doInBackground(String... params) {

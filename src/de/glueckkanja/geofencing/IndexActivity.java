@@ -9,10 +9,6 @@
 package de.glueckkanja.geofencing;
 
 import com.estimote.sdk.BeaconManager;
-
-
-
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
@@ -62,7 +58,7 @@ public class IndexActivity extends Activity{
 	 	myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 	 	myOverviewBeaconManager = new BeaconManager(this);
 		MAC_Address = myBluetoothAdapter.getAddress();
-	 	tv_macAddress.setText(myBluetoothAdapter.getAddress());
+	 	tv_macAddress.setText(MAC_Address);
 		 
 	 	//check Bluetooth state	
 	 	bluetoothState();
@@ -73,23 +69,23 @@ public class IndexActivity extends Activity{
 		//Called if Device does not support Bluetooth
 		if (myBluetoothAdapter == null) {
 			tv_bluetoothState.setTextColor(Color.RED);
-			tv_bluetoothState.setText("Gerät unterstützt kein Bluetooth!");
+			tv_bluetoothState.setText(R.string.bluetoothState_noLowEnergy);
 		}
 		//Called if Bluetooth is enabled
 		if (myBluetoothAdapter.isEnabled()) {
 			tv_bluetoothState.setTextColor(Color.GREEN);
-			tv_bluetoothState.setText("Bluetooth aktiviert!");
+			tv_bluetoothState.setText(R.string.bluetoothState_enabled);
 
 		}else{ // Called if not
 			tv_bluetoothState.setTextColor(Color.RED);
-			tv_bluetoothState.setText("Bluetooth ist aus!");
+			tv_bluetoothState.setText(R.string.bluetoothState_disabled);
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 		}
 		//Called if Device does not support Bluetooth low energy
 		if (!myOverviewBeaconManager.hasBluetooth()) {
 			tv_bluetoothState.setTextColor(Color.RED);
-			tv_bluetoothState.setText("Gerät unterstützt kein Bluetooth-Low-Energy");
+			tv_bluetoothState.setText(R.string.bluetoothState_noLowEnergy);
 		}
 	}
 	
@@ -98,11 +94,11 @@ public class IndexActivity extends Activity{
         //accepted Request
         if(resultCode == RESULT_OK){
         	tv_bluetoothState.setTextColor(Color.GREEN);
-        	tv_bluetoothState.setText("Bluetooth aktiviert!");
+        	tv_bluetoothState.setText(R.string.bluetoothState_enabled);
         }//didn't accept Request
         if(resultCode == RESULT_CANCELED){
         	tv_bluetoothState.setTextColor(Color.RED);
-        	tv_bluetoothState.setText("Bluetooth ist aus!");
+        	tv_bluetoothState.setText(R.string.bluetoothState_disabled);
         }
     }
 	
@@ -120,7 +116,7 @@ public class IndexActivity extends Activity{
 	protected void onResume(){
 		super.onResume();
 		if(!myBluetoothAdapter.isEnabled()){
-			Toast.makeText(getApplicationContext(), "Bluetooth ist Aus!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), R.string.bluetoothState_disabled, Toast.LENGTH_SHORT).show();
 			//make Button Visible
 			b_bluetooth.setVisibility(0);
 		}
@@ -194,12 +190,5 @@ public class IndexActivity extends Activity{
 	}
 	public void oc_serviceOFF(View v) {
 		// TODO Auto-generated method stub
-		if(intentService != null){
-			if(stopService(intentService)){
-				intentService = null;
-			}
-		}else{
-			Toast.makeText(getBaseContext(), "No Service created!", Toast.LENGTH_SHORT).show();
-		}
-	}
+		stopService(new Intent(getBaseContext(), SendingService.class));	}
 }

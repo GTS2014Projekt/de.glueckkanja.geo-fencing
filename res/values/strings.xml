@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	
     <string name="app_name">Geo-Fencing</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_beacon_list">BeaconList</string>
     <string name="action_mode">Mode</string>
+    
+    <!--  -->
+    <string name="bluetoothState_hint">Bluetooth State</string>
+    <string name="bluetoothState_none">Device does not support Bluetooth</string>
+    <string name="bluetoothState_noLowEnergy">Device does not support Bluetooth-Low-Energy</string>
+    <string name="bluetoothState_enabled">Bluetooth activated</string>
+    <string name="bluetoothState_disabled">Bluetooth deactivated</string>
+   
+    <!--  -->
+    <string name="hint_IpAddress">IP-Address</string>
+    <string name="hint_MACAddress">MAC-Address</string>
+    <string name="button_serviceON">Service ON</string>
+    <string name="button_serviceOFF">Service OFF</string>
+    <string name="button_toBeaconList">Beacon List</string>
+    <string name="button_startBluetooth">Start Bluetooth</string>
 
+    <!--  -->
+    <string name="Beacons_none">No Beacons found</string>
+    
 </resources>
