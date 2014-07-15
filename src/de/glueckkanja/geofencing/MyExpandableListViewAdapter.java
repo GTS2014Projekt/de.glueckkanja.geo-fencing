@@ -18,14 +18,14 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-public class myExpandableListViewAdapter extends BaseExpandableListAdapter {
+public class MyExpandableListViewAdapter extends BaseExpandableListAdapter {
     //Attributes
 	private Context context;
     private ArrayList<BeaconItem> parentList = new ArrayList<BeaconItem>();
     
      
     
-    public myExpandableListViewAdapter(Context context) {   	
+    public MyExpandableListViewAdapter(Context context) {   	
     	this.context = context;
     }
     

@@ -29,7 +29,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
-public class sendThread extends AsyncTask<Void, Void, JSONArray> {
+public class SendThread extends AsyncTask<Void, Void, JSONArray> {
 	//Attributes
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>(); 
 	private BeaconListingActivity myclassBeaconList;
@@ -41,7 +41,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	private boolean Running = true;
 	private Thread sceduler;
 	
-	public sendThread(BeaconListingActivity classbeaconList, String URL, String Mac, String data){
+	public SendThread(BeaconListingActivity classbeaconList, String URL, String Mac, String data){
 		this.myclassBeaconList = classbeaconList;
 		this.URL = URL;
 		this.Mac = Mac;
@@ -66,7 +66,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 		});
 	}
 	
-	public sendThread(String URL, String Mac, String data){
+	public SendThread(String URL, String Mac, String data){
 		this.URL = URL;
 		this.Mac = Mac;
 		this.data = data;
@@ -82,7 +82,7 @@ public class sendThread extends AsyncTask<Void, Void, JSONArray> {
 	public void sending(ArrayList<BeaconItem> beaconList){
 		data = createData(beaconList);
 		if(data != null && !data.isEmpty()){
-			new sendThread(URL, Mac, data).execute();
+			new SendThread(URL, Mac, data).execute();
 		}
 	}
 	

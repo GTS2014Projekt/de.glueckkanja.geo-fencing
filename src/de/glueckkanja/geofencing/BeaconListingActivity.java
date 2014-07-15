@@ -34,11 +34,12 @@ public class BeaconListingActivity extends Activity {
 	private static final String TAG = BeaconListingActivity.class.getSimpleName();
 	private static String serverURL;
 	private BeaconManager myBeaconManager;
-	private myExpandableListViewAdapter myAdapter;
+	private MyExpandableListViewAdapter myAdapter;
 	private Intent myIntent;
 	private String MAC_Address;
-	private sendThread sendThread;
-	DecimalFormat f = new DecimalFormat("#0.00"); 
+	private SendThread sendThread;
+	private Sorter mySorter;
+	DecimalFormat format = new DecimalFormat("#0.00"); 
 	
 	
 	@Override
@@ -51,8 +52,10 @@ public class BeaconListingActivity extends Activity {
 		serverURL = myIntent.getStringExtra("URL");
 		//Widgets
 		elv_beaconList = (ExpandableListView) findViewById(R.id.elv_beaconList);
-		myAdapter = new myExpandableListViewAdapter(getApplicationContext());
+		myAdapter = new MyExpandableListViewAdapter(getApplicationContext());
 		elv_beaconList.setAdapter(myAdapter);			
+		//Initialize Sorter
+		mySorter = new Sorter();
 		//Initialize BeaconManager
 		beaconManager();
 	}
@@ -81,6 +84,7 @@ public class BeaconListingActivity extends Activity {
 		    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
 	    					}  
 	    				}
+	    				mySorter.InsertionSort(beaconList);
 	    				myAdapter.refreshList(beaconList);
 	    			}
 	    		});
