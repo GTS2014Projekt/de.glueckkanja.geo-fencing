@@ -15,6 +15,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -118,7 +119,7 @@ public class IndexActivity extends Activity{
 		if(!myBluetoothAdapter.isEnabled()){
 			Toast.makeText(getApplicationContext(), R.string.bluetoothState_disabled, Toast.LENGTH_SHORT).show();
 			//make Button Visible
-			b_bluetooth.setVisibility(0);
+			//b_bluetooth.setVisibility();
 		}
 		
 	}
@@ -190,5 +191,5 @@ public class IndexActivity extends Activity{
 	}
 	public void oc_serviceOFF(View v) {
 		// TODO Auto-generated method stub
-		stopService(new Intent(getBaseContext(), SendingService.class));	}
+		stopService(intentService);	}
 }
