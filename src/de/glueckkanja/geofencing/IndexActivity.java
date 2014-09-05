@@ -52,8 +52,7 @@ public class IndexActivity extends Activity{
 	 	b_beacons=(Button) findViewById(R.id.b_beacons);	 	
 	 	b_bluetooth=(Button) findViewById(R.id.b_bluetooth);
 	 	b_ServiceON=(Button) findViewById(R.id.b_ServiceON);
-	 	b_ServiceOFF=(Button) findViewById(R.id.bServiceOFF);
-	 	//end Widgets  
+	 	b_ServiceOFF=(Button) findViewById(R.id.bServiceOFF); 
 		
 		//BluetoothAdapter
 	 	myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

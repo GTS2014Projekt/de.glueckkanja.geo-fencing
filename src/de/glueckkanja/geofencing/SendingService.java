@@ -22,25 +22,36 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Region;
+import com.estimote.sdk.Utils;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
 public class SendingService extends Service {
 	//debug
-		private int counter=0;
+	private int counter=0;
+	protected static final String TAG = "SendingService";
 	//To manipulate update time
-		final private int timerDuration= 15000;
+	final private int timerDuration= 15000;
 	//Attributes
 	private Handler handler = new Handler();
 	private String url;
 	private String mac;
 	private ArrayList<BeaconItem> beaconList;
+	private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
+	private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, null, null);
+	
 
+	private BeaconManager beaconManager = new BeaconManager(this);
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -50,15 +61,49 @@ public class SendingService extends Service {
 	
 	public int onStartCommand(Intent intent, int flags, int startId){
 		Toast.makeText(getBaseContext(), "Started Service", Toast.LENGTH_LONG).show();
+		Log.d(TAG, "Started Service");
+		//initialize Ranging Listener
+		beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+			@Override
+			public void onBeaconsDiscovered(Region region, List<Beacon> pulledBeacons) {
+				// TODO Auto-generated method stub
+				//Log.d(TAG, "Ranged beacons: " + pulledBeacons.toString());
+		    	beaconList.clear();
+				if (pulledBeacons.isEmpty()){
+					Toast.makeText(getApplicationContext(), "Keine Beacons gefunden!", Toast.LENGTH_SHORT).show();
+				}else{
+					Log.d(TAG, "Pulling beacons");
+					for(int i=0 ;i < pulledBeacons.size();i++){	
+    					//Adding pulled informations into own List
+						//Returns distance in meters based on beacon's RSSI and measured power. http://estimote.github.io/Android-SDK/JavaDocs/
+						double range = Utils.computeAccuracy(pulledBeacons.get(i));
+    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
+					}  
+				}
+			}
+		});
+		
+		beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+			@Override public void onServiceReady() {
+				try {
+					beaconManager.startRanging(ALL_ESTIMOTE_BEACONS);
+					Log.d(TAG, "Starting Ranging");
+				} catch (RemoteException e) {
+					Log.e(TAG, "Cannot start ranging", e);
+				}
+		    }
+		});
+		
+		
 		handler.postDelayed(new Runnable(){
 			@Override
 			public void run(){
-				Log.d("Handler", "Durchlauf" + counter++);
+				Log.d(TAG, "Durchlauf" + counter++);
 				Toast.makeText(getBaseContext(), String.valueOf(counter), Toast.LENGTH_SHORT).show();
 				if(beaconList != null){
 					String data = createData(beaconList);
 					if(data != null && !data.isEmpty()){				
-							new BackgroundTask().execute(url, mac, data);
+						new BackgroundTask().execute(url, mac, data);
 					}else{
 						Toast.makeText(getBaseContext(), "no Data", Toast.LENGTH_SHORT).show();
 					}
@@ -74,7 +119,12 @@ public class SendingService extends Service {
 	
 	public void onDestroy(){
 		super.onDestroy();
-		Toast.makeText(this, "Service stopped", Toast.LENGTH_LONG).show();
+		try {
+			beaconManager.stopRanging(ALL_ESTIMOTE_BEACONS);
+		} catch (RemoteException e) {
+			Log.e(TAG, "Cannot stop but it does not matter now", e);
+		}
+		Toast.makeText(getBaseContext(), "Service stopped", Toast.LENGTH_LONG).show();
 	}
 	
 	

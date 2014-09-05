@@ -84,7 +84,7 @@ public class BeaconListingActivity extends Activity {
 		    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
 	    					}  
 	    				}
-	    				mySorter.InsertionSort(beaconList);
+	    				//mySorter.InsertionSort(beaconList);
 	    				myAdapter.refreshList(beaconList);
 	    			}
 	    		});
