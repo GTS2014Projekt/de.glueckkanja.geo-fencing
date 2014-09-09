@@ -44,6 +44,7 @@ public class SendingService extends Service {
 	final private int timerDuration= 15000;
 	//Attributes
 	private Handler handler = new Handler();
+	boolean running = true;
 	private String url;
 	private String mac;
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>();
@@ -60,6 +61,8 @@ public class SendingService extends Service {
 	}
 	
 	public int onStartCommand(Intent intent, int flags, int startId){
+		url = intent.getStringExtra("url");
+		mac = intent.getStringExtra("MAC");
 		Toast.makeText(getBaseContext(), "Started Service", Toast.LENGTH_LONG).show();
 		Log.d(TAG, "Started Service");
 		//initialize Ranging Listener
@@ -98,11 +101,14 @@ public class SendingService extends Service {
 		handler.postDelayed(new Runnable(){
 			@Override
 			public void run(){
-				Log.d(TAG, "Durchlauf" + counter++);
+				Log.d("SendingService", "Durchlauf" + counter++);
 				Toast.makeText(getBaseContext(), String.valueOf(counter), Toast.LENGTH_SHORT).show();
 				if(beaconList != null){
+					Log.d(TAG, "beaconlist !null");
 					String data = createData(beaconList);
-					if(data != null && !data.isEmpty()){				
+					if(data != null && !data.isEmpty()){
+						Log.d("SendingService", "Start Backgroundtask");
+						Log.d("SendingService", data);
 						new BackgroundTask().execute(url, mac, data);
 					}else{
 						Toast.makeText(getBaseContext(), "no Data", Toast.LENGTH_SHORT).show();
@@ -110,7 +116,10 @@ public class SendingService extends Service {
 				}else{
 					Toast.makeText(getBaseContext(), "beaconList not initialized", Toast.LENGTH_SHORT).show();
 				}
-				handler.postDelayed(this, timerDuration);
+				
+				if(running){
+					handler.postDelayed(this, timerDuration);
+				}
 			}
 			
 		}, timerDuration);
@@ -119,6 +128,7 @@ public class SendingService extends Service {
 	
 	public void onDestroy(){
 		super.onDestroy();
+		running=false;
 		try {
 			beaconManager.stopRanging(ALL_ESTIMOTE_BEACONS);
 		} catch (RemoteException e) {
@@ -149,7 +159,8 @@ public class SendingService extends Service {
 			// TODO Auto-generated method stub
 			String url = params[0];
 			String mac = params[1];
-			String data = params[2];			
+			String data = params[2];
+			Log.d("SendingService", url+" "+mac+" "+data);
 			return jsonSending(url, mac, data);
 		}
 		
@@ -161,7 +172,7 @@ public class SendingService extends Service {
 				
 				// Add your data
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-				nameValuePairs.add(new BasicNameValuePair("macAdresse", mac));
+				nameValuePairs.add(new BasicNameValuePair("macAdress", mac));
 				nameValuePairs.add(new BasicNameValuePair("beacons", data));
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				

@@ -50,7 +50,7 @@ public class IndexActivity extends Activity{
 	 	tv_macAddress = (TextView) findViewById(R.id.tv_macAddress);
 	 	e_URL = (EditText) findViewById(R.id.e_URL);
 	 	b_beacons=(Button) findViewById(R.id.b_beacons);	 	
-	 	b_bluetooth=(Button) findViewById(R.id.b_bluetooth);
+	 	b_bluetooth=(Button) findViewById(R.id.b_bluet);
 	 	b_ServiceON=(Button) findViewById(R.id.b_ServiceON);
 	 	b_ServiceOFF=(Button) findViewById(R.id.bServiceOFF); 
 		
@@ -182,7 +182,7 @@ public class IndexActivity extends Activity{
 		if(intentService == null){
 		intentService = new Intent(getBaseContext(), SendingService.class);
 		intentService.putExtra("MAC", MAC_Address);
-		intentService.putExtra("url", e_URL.getText().toString());
+		intentService.putExtra("url", "HTTP://"+e_URL.getText().toString()+":3000/functions/update");
 		startService(intentService);
 		}else{
 			Toast.makeText(getBaseContext(), "Service already running", Toast.LENGTH_SHORT).show();
@@ -190,5 +190,7 @@ public class IndexActivity extends Activity{
 	}
 	public void oc_serviceOFF(View v) {
 		// TODO Auto-generated method stub
-		stopService(intentService);	}
+		stopService(intentService);	
+		intentService = null;
+	}
 }
