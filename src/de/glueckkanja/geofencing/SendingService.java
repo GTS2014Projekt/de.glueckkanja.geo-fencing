@@ -46,7 +46,7 @@ public class SendingService extends Service {
 	private Handler handler = new Handler();
 	private String url;
 	private String mac;
-	private ArrayList<BeaconItem> beaconList;
+	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>();
 	private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
 	private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, null, null);
 	
