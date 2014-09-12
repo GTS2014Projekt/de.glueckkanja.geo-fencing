@@ -109,7 +109,7 @@ public class SendingService extends Service {
 					if(data != null && !data.isEmpty()){
 						Log.d("SendingService", "Start Backgroundtask");
 						Log.d("SendingService", data);
-						new BackgroundTask().execute(url, mac, data);
+						new BackGroundSending().execute(url, mac, data);
 					}else{
 						Toast.makeText(getBaseContext(), "no Data", Toast.LENGTH_SHORT).show();
 					}
@@ -150,55 +150,5 @@ public class SendingService extends Service {
 		}
 		return data;
 	}
-	
-	//Is the Asyncronous Task that runs in Background
-	private class BackgroundTask extends AsyncTask<String, Void, JSONArray>{
-
-		@Override
-		protected JSONArray doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			String url = params[0];
-			String mac = params[1];
-			String data = params[2];
-			Log.d("SendingService", url+" "+mac+" "+data);
-			return jsonSending(url, mac, data);
-		}
-		
-		private JSONArray jsonSending(String url, String mac, String data){
-			String result11="";
-			try {
-				HttpClient httpclient = new DefaultHttpClient();
-				HttpPost httppost = new HttpPost(url);
-				
-				// Add your data
-				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-				nameValuePairs.add(new BasicNameValuePair("macAdress", mac));
-				nameValuePairs.add(new BasicNameValuePair("beacons", data));
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				
-				// Execute HTTP Post Request
-				HttpResponse response = httpclient.execute(httppost);
-				
-				BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
-				StringBuilder sb = new StringBuilder();
-				sb.append(reader.readLine() + "\n");
-				String line = "0";
-				while ((line = reader.readLine()) != null) {
-					sb.append(line + "\n");
-				}
-				reader.close();
-				Log.d("Sending", "Sendet daten!");
-				result11 = sb.toString();
-				return new JSONArray(result11);
-				// parsing data
-			} catch (Exception e) {
-				    e.printStackTrace();
-				    return null;
-			}
-				
-		}		
-	}//end Class
-	
-	
 
 }
