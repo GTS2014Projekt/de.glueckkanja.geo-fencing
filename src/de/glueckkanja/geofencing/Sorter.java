@@ -1,5 +1,13 @@
 package de.glueckkanja.geofencing;
 
+/*
+ * Author : Jan-Niklas Vierheller
+ * Date: 12.09.2014
+ * 
+ * Summary: This will later sort my Beaconlist the way I want it
+ * 
+ * 
+ */
 
 import java.util.ArrayList;
 

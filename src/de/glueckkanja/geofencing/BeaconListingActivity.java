@@ -37,7 +37,6 @@ public class BeaconListingActivity extends Activity {
 	private MyExpandableListViewAdapter myAdapter;
 	private Intent myIntent;
 	private String MAC_Address;
-	private SendThread sendThread;
 	private Sorter mySorter;
 	DecimalFormat format = new DecimalFormat("#0.00"); 
 	
@@ -71,10 +70,11 @@ public class BeaconListingActivity extends Activity {
 	    	public void onBeaconsDiscovered(Region region, final List<Beacon> pulledBeacons) {
 	    		runOnUiThread(new Runnable() {
 	    			@Override
-	    			//
 	    			public void run() {
+	    				//Called whenever a beacon is ranged
 	    				beaconList.clear();
 	    				if (pulledBeacons.isEmpty()){
+	    					//If no beacons in range, no listing is needed
 	    					Toast.makeText(getApplicationContext(), "Keine Beacons gefunden!", Toast.LENGTH_SHORT).show();
 	    				}else{
 	    					for(int i=0 ;i < pulledBeacons.size();i++){	
@@ -84,6 +84,7 @@ public class BeaconListingActivity extends Activity {
 		    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
 	    					}  
 	    				}
+	    				//Refreshing the List
 	    				//mySorter.InsertionSort(beaconList);
 	    				myAdapter.refreshList(beaconList);
 	    			}
@@ -95,16 +96,17 @@ public class BeaconListingActivity extends Activity {
 	
 	
 	private void connectToService() {
-	    myBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-	      @Override
-	      public void onServiceReady() {
-	        try {
-	          myBeaconManager.startRanging(ALL_ESTIMOTE_BEACONS_REGION);
-	        } catch (RemoteException e) {
-	        	Log.e(TAG, "Cannot start ranging", e);
-	        }
-	      }
-	    });
+		//Called to connect and range
+		myBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+			@Override
+			public void onServiceReady() {
+				try{
+					myBeaconManager.startRanging(ALL_ESTIMOTE_BEACONS_REGION);
+				} catch (RemoteException e) {
+					Log.e(TAG, "Cannot start ranging", e);
+				}
+			}
+		});
 	}
 	
 	public ArrayList<BeaconItem> getBeaconList(){
@@ -125,21 +127,17 @@ public class BeaconListingActivity extends Activity {
 	
 	protected void onStop(){
 		super.onStop();
-		try {
-		      myBeaconManager.stopRanging(ALL_ESTIMOTE_BEACONS_REGION);
-		    } catch (RemoteException e) {
-		     
-		    }
+		try{
+			myBeaconManager.stopRanging(ALL_ESTIMOTE_BEACONS_REGION);
+		}catch (RemoteException e){
+			Log.e(TAG, "Cannot stop ranging", e);
+		}
 	}
 	
 	protected void onDestroy(){
 		super.onDestroy();
 		myBeaconManager.disconnect();
-	}
-	
-	
-	
-	
+	}	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -149,9 +147,7 @@ public class BeaconListingActivity extends Activity {
 		return true;
 	}
 
-	@Override
-	
-	
+	@Override	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -162,9 +158,6 @@ public class BeaconListingActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	
-
 }
 
 

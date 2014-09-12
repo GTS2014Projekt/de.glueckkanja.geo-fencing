@@ -27,18 +27,21 @@ import android.widget.Toast;
 
 
 public class IndexActivity extends Activity{
+	//Displays
 	private static final int REQUEST_ENABLE_BT = 1;
+	private String MAC_Address;
+	//Adapter
+	private BluetoothAdapter myBluetoothAdapter;
+	private BeaconManager myOverviewBeaconManager;
+	private Intent intentService;
+	//Widgets
 	private TextView tv_bluetoothState;
 	private TextView tv_macAddress;
 	private EditText e_URL;
 	private Button b_beacons;
 	private Button b_bluetooth;
 	private Button b_ServiceON;
-	private Button b_ServiceOFF;
-	private BluetoothAdapter myBluetoothAdapter;
-	private BeaconManager myOverviewBeaconManager;
-	private String MAC_Address;
-	private Intent intentService;
+	private Button b_ServiceOFF;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,16 +106,6 @@ public class IndexActivity extends Activity{
     }
 	
 	
-	
-	
-	protected void onStart(){
-		super.onStart();
-	}
-	
-	protected void onRestart(){
-		super.onRestart();	
-		
-	}
 	protected void onResume(){
 		super.onResume();
 		if(!myBluetoothAdapter.isEnabled()){
@@ -122,25 +115,9 @@ public class IndexActivity extends Activity{
 		}
 		
 	}
-
-	protected void onPause(){
-		super.onPause();
-	}
-	
-	protected void onStop(){
-		super.onStop();
-	}
-	
-	protected void onDestroy(){
-		super.onDestroy();
-	}
-	
-	
-	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_index, menu);
 		return true;
@@ -163,7 +140,7 @@ public class IndexActivity extends Activity{
 
 	
 	public void oc_Beacons(View v) {
-		// TODO Auto-generated method stub
+		//Calls ListingActivity
 		if(myBluetoothAdapter.isEnabled()){
 			Intent i_beacon = new Intent(this, BeaconListingActivity.class);
 			i_beacon.putExtra("MAC", MAC_Address);
@@ -173,12 +150,14 @@ public class IndexActivity extends Activity{
 			bluetoothState();
 		}
 	}
+	
 	public void oc_bluetooth(View v) {
-		// TODO Auto-generated method stub
+		//Calls bluetoothState function
 		bluetoothState();	
 	}
+	
 	public void oc_serviceON(View v) {
-		// TODO Auto-generated method stub
+		//Calls SendingService
 		if(intentService == null){
 		intentService = new Intent(getBaseContext(), SendingService.class);
 		intentService.putExtra("MAC", MAC_Address);
@@ -188,9 +167,12 @@ public class IndexActivity extends Activity{
 			Toast.makeText(getBaseContext(), "Service already running", Toast.LENGTH_SHORT).show();
 		}
 	}
+	
 	public void oc_serviceOFF(View v) {
-		// TODO Auto-generated method stub
-		stopService(intentService);	
-		intentService = null;
+		//Stops Service
+		if(intentService != null){
+			stopService(intentService);	
+			intentService = null;
+		}
 	}
 }

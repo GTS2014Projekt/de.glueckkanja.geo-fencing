@@ -2,7 +2,7 @@
  * Author : Jan-Niklas Vierheller
  * Date: 25.06.2014
  * 
- * Summary: This is a Listview Adapter that handles and lists all Estiomote Beacons
+ * Summary: This is a Listview Adapter that handles the ExpandableListView, which contains listed Beacons
  * 
  * Uses Estimote Technology and their Code!
  */
@@ -22,8 +22,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter {
     //Attributes
 	private Context context;
     private ArrayList<BeaconItem> parentList = new ArrayList<BeaconItem>();
-    
-     
+         
     
     public MyExpandableListViewAdapter(Context context) {   	
     	this.context = context;
@@ -33,9 +32,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter {
         this.parentList.clear();
         this.parentList.addAll(list);
         this.notifyDataSetChanged();
-    }
-    
-   
+    }   
 	                          
 	@Override
 	public boolean hasStableIds() {
@@ -73,8 +70,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded,
-		View convertView, ViewGroup parent) {
+	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		TextView tv=new TextView(context);
 		tv.setText(parentList.get(groupPosition).getMAC_Address());
 		tv.setPadding(90, 0, 0, 0);
@@ -83,8 +79,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition,
-		boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		TextView tv=new TextView(context);
 		String text = parentList.get(groupPosition).getChildList()[childPosition];
 		tv.setText(text);
