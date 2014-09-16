@@ -39,7 +39,9 @@ public class BackGroundSending extends AsyncTask<String, Void, JSONArray> {
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			
 			// Execute HTTP Post Request
+			Log.d("SendingService", "Vor senden");
 			HttpResponse response = httpclient.execute(httppost);
+			Log.d("SendingService", "Nach senden");
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
 			StringBuilder sb = new StringBuilder();
@@ -54,7 +56,8 @@ public class BackGroundSending extends AsyncTask<String, Void, JSONArray> {
 			return new JSONArray(result11);
 			// parsing data
 		} catch (Exception e) {
-			    e.printStackTrace();
+			Log.d("SendingService", e.toString());    
+			e.printStackTrace();
 			    return null;
 		}
 	}

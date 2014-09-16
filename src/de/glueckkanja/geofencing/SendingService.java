@@ -75,11 +75,12 @@ public class SendingService extends Service {
 				if (pulledBeacons.isEmpty()){
 					Toast.makeText(getApplicationContext(), "Keine Beacons gefunden!", Toast.LENGTH_SHORT).show();
 				}else{
-					Log.d(TAG, "Pulling beacons");
+					//Log.d(TAG, "Pulling beacons");
 					for(int i=0 ;i < pulledBeacons.size();i++){	
     					//Adding pulled informations into own List
 						//Returns distance in meters based on beacon's RSSI and measured power. http://estimote.github.io/Android-SDK/JavaDocs/
 						double range = Utils.computeAccuracy(pulledBeacons.get(i));
+						
     					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
 					}  
 				}
