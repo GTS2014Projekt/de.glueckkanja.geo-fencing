@@ -114,6 +114,7 @@ public class IndexActivity extends Activity{
 			//b_bluetooth.setVisibility();
 		}
 		
+		
 	}
 	
 	@Override

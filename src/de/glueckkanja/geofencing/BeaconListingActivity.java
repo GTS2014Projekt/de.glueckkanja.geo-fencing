@@ -19,12 +19,14 @@ import com.estimote.sdk.Utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class BeaconListingActivity extends Activity {
@@ -34,7 +36,9 @@ public class BeaconListingActivity extends Activity {
 	private static final String TAG = BeaconListingActivity.class.getSimpleName();
 	private static String serverURL;
 	private BeaconManager myBeaconManager;
+	//Widgets
 	private MyExpandableListViewAdapter myAdapter;
+	private TextView tv_beaconStatus;
 	private Intent myIntent;
 	private String MAC_Address;
 	private Sorter mySorter;
@@ -53,6 +57,7 @@ public class BeaconListingActivity extends Activity {
 		elv_beaconList = (ExpandableListView) findViewById(R.id.elv_beaconList);
 		myAdapter = new MyExpandableListViewAdapter(getApplicationContext());
 		elv_beaconList.setAdapter(myAdapter);			
+		tv_beaconStatus = (TextView)findViewById(R.id.tv_BeaconStatus);
 		//Initialize Sorter
 		mySorter = new Sorter();
 		//Initialize BeaconManager
@@ -75,14 +80,18 @@ public class BeaconListingActivity extends Activity {
 	    				beaconList.clear();
 	    				if (pulledBeacons.isEmpty()){
 	    					//If no beacons in range, no listing is needed
-	    					Toast.makeText(getApplicationContext(), "Keine Beacons gefunden!", Toast.LENGTH_SHORT).show();
+	    					//Toast.makeText(getApplicationContext(), "Keine Beacons gefunden!", Toast.LENGTH_SHORT).show();
+	    					tv_beaconStatus.setTextColor(Color.RED);
+	    					tv_beaconStatus.setText("Keine Beacons gefunden!");
 	    				}else{
 	    					for(int i=0 ;i < pulledBeacons.size();i++){	
 		    					//Adding pulled informations into own List
 	    						//Returns distance in meters based on beacon's RSSI and measured power. http://estimote.github.io/Android-SDK/JavaDocs/
 	    						double range = Utils.computeAccuracy(pulledBeacons.get(i));
 		    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
-	    					}  
+	    					} 
+	    					tv_beaconStatus.setTextColor(Color.GREEN);
+	    					tv_beaconStatus.setText("Gefundene Beacons: "+String.valueOf(pulledBeacons.size()));
 	    				}
 	    				//Refreshing the List
 	    				//mySorter.InsertionSort(beaconList);
