@@ -18,21 +18,20 @@ public class BeaconItem {
 	private String name;
 	private String mac_Address;
 	private double initRange; 
-	private double averageRange;
 	private int minor;
 	private int major;
 	private int mPower;
 	private int rssi;	
 	
 	private int counter=0;
-	private double[] ranges = new double[128];
+	private double sumRange=0;
 	//end Attributes
 	
 	public BeaconItem(String name, String mac_Address, double range, int minor, int major, int mPower, int rssi){
 		this.name=name;
 		this.mac_Address = mac_Address;
 		this.initRange = range;
-		this.ranges[counter] = range;
+		this.sumRange+=range;
 		this.counter++;
 		this.minor = minor;
 		this.major = major;
@@ -42,21 +41,14 @@ public class BeaconItem {
 	}
 	
 	public void setNewRange(double range){
-		this.ranges[this.counter] = range;
+		sumRange+=range;
 		this.counter++;
 	}
 	
 	public double computeAverageRange(){
-		double sum=0;
-		String debug="";
-		for(int i=0;i<this.counter;i++){
-			sum+=this.ranges[i];
-			debug+=String.valueOf(ranges[i])+", ";
-		}
-		Log.d("SendingService","avaerage sum= "+ debug + "And average is: "+String.valueOf(sum/this.counter));
-		double retrn = sum/this.counter;
+		double retrn = this.sumRange/this.counter;
+		Log.d("SendingService", String.valueOf(retrn));		
 		this.counter=0;
-		this.ranges=new double[128];
 		return retrn;
 	}
 	
