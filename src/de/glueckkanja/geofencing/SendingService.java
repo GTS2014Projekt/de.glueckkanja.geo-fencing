@@ -71,7 +71,7 @@ public class SendingService extends Service {
 			public void onBeaconsDiscovered(Region region, List<Beacon> pulledBeacons) {
 				// TODO Auto-generated method stub
 				//Log.d(TAG, "Ranged beacons: " + pulledBeacons.toString());
-		    	beaconList.clear();
+		    	
 				if (pulledBeacons.isEmpty()){
 					Toast.makeText(getApplicationContext(), "Keine Beacons gefunden!", Toast.LENGTH_SHORT).show();
 				}else{
@@ -79,9 +79,22 @@ public class SendingService extends Service {
 					for(int i=0 ;i < pulledBeacons.size();i++){	
     					//Adding pulled informations into own List
 						//Returns distance in meters based on beacon's RSSI and measured power. http://estimote.github.io/Android-SDK/JavaDocs/
-						double range = Utils.computeAccuracy(pulledBeacons.get(i));
-						
-    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    				
+						String currentMAC = pulledBeacons.get(i).getMacAddress();
+						boolean isInside = false;
+						int index=0;
+						for(int j=0;j<beaconList.size();j++){
+							if(beaconList.get(j).getMAC_Address().compareTo(currentMAC)==0){
+								isInside=true;
+								index=j;
+							}
+						}
+						if(isInside){
+							double range = Utils.computeAccuracy(pulledBeacons.get(i));
+							beaconList.get(index).setNewRange(range);
+						}else{
+							double range = Utils.computeAccuracy(pulledBeacons.get(i));						
+	    					beaconList.add(new BeaconItem(pulledBeacons.get(i).getName(), pulledBeacons.get(i).getMacAddress(), range, pulledBeacons.get(i).getMinor(), pulledBeacons.get(i).getMajor(), pulledBeacons.get(i).getMeasuredPower(), pulledBeacons.get(i).getRssi()));	    			
+						}						
 					}  
 				}
 			}
@@ -104,20 +117,18 @@ public class SendingService extends Service {
 			public void run(){
 				Log.d("SendingService", "Durchlauf" + counter++);
 				Toast.makeText(getBaseContext(), String.valueOf(counter), Toast.LENGTH_SHORT).show();
-				if(beaconList != null){
-					Log.d(TAG, "beaconlist !null");
-					String data = createData(beaconList);
-					if(data != null && !data.isEmpty()){
-						Log.d("SendingService", "Start Backgroundtask");
-						Log.d("SendingService", data);
-						new BackGroundSending().execute(url, mac, data);
-					}else{
-						Toast.makeText(getBaseContext(), "no Data", Toast.LENGTH_SHORT).show();
-					}
+				
+				String data;
+				if(!beaconList.isEmpty()){
+					data = createData(beaconList);
 				}else{
-					Toast.makeText(getBaseContext(), "beaconList not initialized", Toast.LENGTH_SHORT).show();
+					data=null;
 				}
 				
+				Log.d("SendingService", "Start Backgroundtask");
+				Log.d("SendingService", data);
+				new BackGroundSending().execute(url, mac, data);
+				beaconList.clear();					
 				if(running){
 					handler.postDelayed(this, timerDuration);
 				}
@@ -144,9 +155,9 @@ public class SendingService extends Service {
 		for(int i = 0; i<beaconList.size(); i++){
 			if(i== 0){
 				//no "#" in first position
-				data += beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getRange();
+				data += beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).computeAverageRange();
 			}else{
-				data += "#"+beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).getRange();
+				data += "#"+beaconList.get(i).getMAC_Address()+"#"+beaconList.get(i).computeAverageRange();
 			}						
 		}
 		return data;

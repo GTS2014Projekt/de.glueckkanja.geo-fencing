@@ -10,27 +10,54 @@
 
 package de.glueckkanja.geofencing;
 
+import android.util.Log;
+
 public class BeaconItem {
 	//Attributes
 	private String[]childList;
 	private String name;
 	private String mac_Address;
-	private double range; 
+	private double initRange; 
+	private double averageRange;
 	private int minor;
 	private int major;
 	private int mPower;
 	private int rssi;	
+	
+	private int counter=0;
+	private double[] ranges = new double[128];
 	//end Attributes
 	
 	public BeaconItem(String name, String mac_Address, double range, int minor, int major, int mPower, int rssi){
 		this.name=name;
 		this.mac_Address = mac_Address;
-		this.range = range;
+		this.initRange = range;
+		this.ranges[counter] = range;
+		this.counter++;
 		this.minor = minor;
 		this.major = major;
 		this.mPower = mPower;
 		this.rssi = rssi;
 		this.childList = createChildList(name, mac_Address, range, minor, major, mPower, rssi);
+	}
+	
+	public void setNewRange(double range){
+		this.ranges[this.counter] = range;
+		this.counter++;
+	}
+	
+	public double computeAverageRange(){
+		double sum=0;
+		String debug="";
+		for(int i=0;i<this.counter;i++){
+			sum+=this.ranges[i];
+			debug+=String.valueOf(ranges[i])+", ";
+		}
+		Log.d("SendingService","avaerage sum= "+ debug + "And average is: "+String.valueOf(sum/this.counter));
+		double retrn = sum/this.counter;
+		this.counter=0;
+		this.ranges=new double[128];
+		return retrn;
 	}
 	
 	public String[] createChildList(String name, String mac_Address, double range, int minor, int major, int mPower, int rssi){
@@ -67,7 +94,7 @@ public class BeaconItem {
 	}
 	
 	public double getRange(){
-		return this.range;
+		return this.initRange;
 	}
 	
 }
