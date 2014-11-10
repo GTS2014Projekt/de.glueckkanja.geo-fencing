@@ -121,13 +121,12 @@ public class SendingService extends Service {
 				String data;
 				if(!beaconList.isEmpty()){
 					data = createData(beaconList);
+					Log.d("SendingService", "Start Backgroundtask");
+					Log.d("SendingService", data);
+					new BackGroundSending().execute(url, mac, data);
 				}else{
 					data=null;
-				}
-				
-				Log.d("SendingService", "Start Backgroundtask");
-				Log.d("SendingService", data);
-				new BackGroundSending().execute(url, mac, data);
+				}			
 				beaconList.clear();					
 				if(running){
 					handler.postDelayed(this, timerDuration);

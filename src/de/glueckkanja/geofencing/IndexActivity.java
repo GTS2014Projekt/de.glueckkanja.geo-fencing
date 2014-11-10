@@ -203,11 +203,26 @@ public class IndexActivity extends Activity{
 		}
 	}
 	
+	@Override
+	public void onNewIntent(Intent i){
+		// Intent i filtern
+		if(intentService==null){
+			Log.d("ServiceIntent", "Kein Service");
+			if(i.getClass().equals(SendingService.class)){
+				intentService=i;
+				Log.d("ServiceIntent", "neuer Service");
+			}
+		}
+	}
+	
 	public void oc_serviceOFF(View v) {
 		//Stops Service
 		if(intentService != null){
 			stopService(intentService);	
 			intentService = null;
+		}else{
+			intentService = new Intent(getBaseContext(), SendingService.class);
+			stopService(intentService);
 		}
 	}
 }
