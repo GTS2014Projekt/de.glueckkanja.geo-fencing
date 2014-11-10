@@ -9,14 +9,17 @@
 package de.glueckkanja.geofencing;
 
 import com.estimote.sdk.BeaconManager;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +37,30 @@ public class IndexActivity extends Activity{
 	private BluetoothAdapter myBluetoothAdapter;
 	private BeaconManager myOverviewBeaconManager;
 	private Intent intentService;
+	private final BroadcastReceiver BTReceiver = new BroadcastReceiver(){
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			Log.d("BluetoothState", context.toString());
+			if(action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
+				final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF);
+				switch(state){
+					case BluetoothAdapter.STATE_OFF:
+						Log.d("BluetoothState","Received: Bluetooth Disconnected");
+						Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+					    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+					break;
+					case BluetoothAdapter.STATE_ON:
+						Log.d("BluetoothState","Received: Bluetooth Connected");
+						tv_bluetoothState.setTextColor(Color.GREEN);
+						tv_bluetoothState.setText(R.string.bluetoothState_enabled);
+					break;							
+				}
+			}
+			
+		}
+ 		
+ 	};
 	//Widgets
 	private TextView tv_bluetoothState;
 	private TextView tv_macAddress;
@@ -62,9 +89,16 @@ public class IndexActivity extends Activity{
 	 	myOverviewBeaconManager = new BeaconManager(this);
 		MAC_Address = myBluetoothAdapter.getAddress();
 	 	tv_macAddress.setText(MAC_Address);
-		 
-	 	//check Bluetooth state	
+		 	 	
+	 	//check Bluetooth state
 	 	bluetoothState();
+	 	
+	 	if(android.os.Build.VERSION.SDK_INT >= 18){
+	 		IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            this.registerReceiver(BTReceiver, filter);
+	 	}
+	 	
+	 	
 	 	
 	}
 	
@@ -72,7 +106,7 @@ public class IndexActivity extends Activity{
 		//Called if Device does not support Bluetooth
 		if (myBluetoothAdapter == null) {
 			tv_bluetoothState.setTextColor(Color.RED);
-			tv_bluetoothState.setText(R.string.bluetoothState_noLowEnergy);
+			tv_bluetoothState.setText(R.string.bluetoothState_none);
 		}
 		//Called if Bluetooth is enabled
 		if (myBluetoothAdapter.isEnabled()) {

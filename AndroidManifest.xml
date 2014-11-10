@@ -19,6 +19,7 @@
         <service
             android:name="com.estimote.sdk.service.BeaconService"
             android:exported="false" />
+       
 
         <activity
             android:name="de.glueckkanja.geofencing.IndexActivity"
