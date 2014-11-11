@@ -164,12 +164,7 @@ public class IndexActivity extends Activity{
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true; 
-		}
-		if(id == R.id.action_mode){
-			
-		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -194,12 +189,20 @@ public class IndexActivity extends Activity{
 	public void oc_serviceON(View v) {
 		//Calls SendingService
 		if(intentService == null){
-		intentService = new Intent(getBaseContext(), SendingService.class);
-		intentService.putExtra("MAC", MAC_Address);
-		intentService.putExtra("url", "HTTP://"+e_URL.getText().toString()+":3000/functions/update");
-		startService(intentService);
+			if(myBluetoothAdapter.isEnabled()){
+				if(!e_URL.getText().toString().isEmpty()){
+					intentService = new Intent(getBaseContext(), SendingService.class);
+					intentService.putExtra("MAC", MAC_Address);
+					intentService.putExtra("url", "HTTP://"+e_URL.getText().toString()+":3000/functions/update");
+					startService(intentService);
+				}else{
+					Toast.makeText(getBaseContext(), "Bitte IP-Addresse eingeben", Toast.LENGTH_SHORT).show();
+				}
+			}else{
+				Toast.makeText(getBaseContext(), "Bitte Bluetooth anschalten", Toast.LENGTH_SHORT).show();
+			}
 		}else{
-			Toast.makeText(getBaseContext(), "Service already running", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getBaseContext(), "Service schon angeschaltet", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -223,6 +226,7 @@ public class IndexActivity extends Activity{
 		}else{
 			intentService = new Intent(getBaseContext(), SendingService.class);
 			stopService(intentService);
+			Toast.makeText(getBaseContext(), "Kein Service an", Toast.LENGTH_SHORT).show();
 		}
 	}
 }

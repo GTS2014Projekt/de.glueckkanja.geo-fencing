@@ -48,6 +48,7 @@ public class SendingService extends Service {
 	private String url;
 	private String mac;
 	private ArrayList<BeaconItem> beaconList = new ArrayList<BeaconItem>();
+	private boolean beaconsFound = false;
 	private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
 	private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, null, null);
 	
@@ -73,8 +74,9 @@ public class SendingService extends Service {
 				//Log.d(TAG, "Ranged beacons: " + pulledBeacons.toString());
 		    	
 				if (pulledBeacons.isEmpty()){
-					Toast.makeText(getApplicationContext(), "Keine Beacons gefunden!", Toast.LENGTH_SHORT).show();
+					beaconsFound=false;
 				}else{
+					beaconsFound = true;
 					//Log.d(TAG, "Pulling beacons");
 					for(int i=0 ;i < pulledBeacons.size();i++){	
     					//Adding pulled informations into own List
@@ -116,18 +118,20 @@ public class SendingService extends Service {
 			@Override
 			public void run(){
 				Log.d("SendingService", "Durchlauf" + counter++);
-				Toast.makeText(getBaseContext(), String.valueOf(counter), Toast.LENGTH_SHORT).show();
-				
+				if(!beaconsFound){
+					Toast.makeText(getBaseContext(), "No Beacons found!", Toast.LENGTH_SHORT).show();
+				}
+				Toast.makeText(getBaseContext(), "Sending", Toast.LENGTH_SHORT).show();
 				String data;
 				if(!beaconList.isEmpty()){
 					data = createData(beaconList);
-					Log.d("SendingService", "Start Backgroundtask");
-					Log.d("SendingService", data);
-					new BackGroundSending().execute(url, mac, data);
 				}else{
 					data=null;
 				}			
-				beaconList.clear();					
+				beaconList.clear();
+				Log.d("SendingService", "Start Backgroundtask");
+				Log.d("SendingService", data);
+				new BackGroundSending().execute(url, mac, data);
 				if(running){
 					handler.postDelayed(this, timerDuration);
 				}

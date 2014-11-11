@@ -2,12 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="de.glueckkanja.geofencing.Overview" >
 
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_settings">
-    </item>
-    <item android:id="@+id/action_mode" android:orderInCategory="200" android:title="@string/action_mode" android:showAsAction="ifRoom"></item>
+   
 
 </menu>
